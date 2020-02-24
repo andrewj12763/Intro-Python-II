@@ -1,4 +1,7 @@
 from room import Room
+from player import Player
+from item import Item
+
 
 # Declare all the rooms
 
@@ -9,7 +12,7 @@ room = {
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
 passages run north and east."""),
 
-    'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
+    'overlook': Room("Grand Overlook", """A steep clifef appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
 the distance, but there is no way across the chasm."""),
 
@@ -38,14 +41,36 @@ room['treasure'].s_to = room['narrow']
 #
 
 # Make a new player object that is currently in the 'outside' room.
+new_player = Player('Rupert', room['outside'])
+print("Welcome, friend!")
+print(input("Which direction would you like to move?: [n] North    [e] East    [s]    South    [w]West    [q] Quit\n"))
+directions = ['n', 'e', 's', 'w', 'q']
+
+
+def move_rooms(direction, current_room):
+    room_link = direction + '_to'
+    if hasattr(current_room, room_link):
+        return getattr(current_room, room_link)
+    else:
+        print("Nothing that way! Try another direction")
+        return current_room
 
 # Write a loop that:
 #
+while not directions == 'q':
 # * Prints the current room name
+    print(new_player.current_room)
 # * Prints the current description (the textwrap module might be useful here).
+    print(new_player.current_room.description)
+
 # * Waits for user input and decides what to do.
-#
+    direction = input("Where to next? [n] North    [e] East    [s]    South    [w]West    [q] Quit\n")
+
 # If the user enters a cardinal direction, attempt to move to the room there.
-# Print an error message if the movement isn't allowed.
-#
+
+    new_player.current_room = move_rooms(direction, new_player.current_room)
+
 # If the user enters "q", quit the game.
+    if direction == 'q':
+        print("Thanks for playing!")
+        break
